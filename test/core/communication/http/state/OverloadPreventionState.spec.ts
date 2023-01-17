@@ -64,6 +64,13 @@ describe('OverloadPreventionState', () => {
             client: instance(httpClientMock),
             stateMachine: instance(httpCommunicationChannelMock),
         };
+        
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.runOnlyPendingTimers()
+        jest.useRealTimers()
     });
 
     it('should not redirect sendStatusRequest to a httpclient', async () => {
@@ -96,7 +103,7 @@ describe('OverloadPreventionState', () => {
         verify(httpClientMock.post(anything(), anything())).never();
     });
 
-    /*it('should not set another state if retry after did not time out', () => {
+    it('should not set another state if retry after did not time out', () => {
         jest.setTimeout(5000);
 
         // when
@@ -108,7 +115,7 @@ describe('OverloadPreventionState', () => {
                 httpCommunicationChannelMock.setNextState(anything()),
             ).never();
         }, 4000);
-    });*/
+    });
 
     it('should set next state to sendingState if retry after did time out', () => {
         jest.setTimeout(5000);
